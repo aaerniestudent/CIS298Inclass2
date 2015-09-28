@@ -2,6 +2,7 @@ package edu.kvcc.cis298.cis298inclass1;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +22,6 @@ public class QuizActivity extends AppCompatActivity {
     //variable for the question string
     private TextView mQuestionTextView;
 
-
     //The questions that will be used it is an array of type
     //question. that contains 5 questions. it is a hard coded
     //array. in most apps, you would want your data to come from
@@ -39,6 +39,7 @@ public class QuizActivity extends AppCompatActivity {
     //Private methods that will be used inside the OnCreate
     //I wrote these not google
     private void updateQuestion() {
+
             //Get the question instance stored in mCurrentIndex
             //of the mQuestionBank array. then call the getTextRessId
             //method (property) to return the integer that points to the string
@@ -113,9 +114,43 @@ public class QuizActivity extends AppCompatActivity {
                 updateQuestion();
             }
         });
+    }
 
+    //static string for override methods
+    private static final String TAG = "QuizActivity";
 
+    //Below are the main activity methods that can be
+    //overriden to do 'work' with our application
+    //the app will call all of these in sequence as it
+    //loads, and as it is closed.
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart() called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause() called");
     }
 
     //these are methods that we did not write, but google provided

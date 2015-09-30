@@ -1,5 +1,6 @@
 package edu.kvcc.cis298.cis298inclass1;
 
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -94,8 +95,7 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-        //method declared above. Changes the question to the next in the array.
-        updateQuestion();
+
 
         //see notes from true button
         mFalseButton = (Button) findViewById(R.id.false_button);
@@ -114,10 +114,38 @@ public class QuizActivity extends AppCompatActivity {
                 updateQuestion();
             }
         });
+
+        //check to see if there is a bundle that is not null
+        //if so, fetch out the KEY_INDEX, which will be te index of
+        // the question that we were on before we did a rotate.
+        if (savedInstanceState != null) {
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+        }
+        //method declared above. Changes the question to the next in the array.
+        updateQuestion();
+
     }
 
     //static string for override methods
     private static final String TAG = "QuizActivity";
+
+    //Static string to be used as the key in the key / value
+    //bundle for saveInstanceState
+    private static final String KEY_INDEX = "index";
+
+    //Overridden method to save any information about
+    //our activity that we will need to restore from
+    //either a rotate or change in activity.
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        //log that onSaveInstanceState was called
+        Log.i(TAG, "onSaveInstanceState");
+        //put the index of the question that we are on
+        //into the variable KEY_INDEX and the value "index"
+        //
+        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+    }
 
     //Below are the main activity methods that can be
     //overriden to do 'work' with our application

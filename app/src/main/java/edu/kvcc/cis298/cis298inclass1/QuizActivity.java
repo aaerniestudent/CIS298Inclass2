@@ -6,17 +6,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
 
-    //create a class level Widget variables so
-    //that we will have access to stuff from the view
-    //no value yet. just declared the variables
-    private Button mTrueButton;
-    private Button mFalseButton;
-    //variable for the next button
+    private RadioGroup mQuestionGroup;
+    private RadioButton mChoice1;
+    private RadioButton mChoice2;
+    private RadioButton mChoice3;
+    private RadioButton mChoice4;
+    private Button mSubmitButton;
     private Button mNextButton;
     //variable for the question string
     private TextView mQuestionTextView;
@@ -27,11 +29,12 @@ public class QuizActivity extends AppCompatActivity {
     //array. in most apps, you would want your data to come from
     //somewhere else. (database, internet) Not be hard coded.
     private Question [] mQuestionBank = new Question[] {
-            new Question(R.string.question_one, true),
-            new Question(R.string.question_two, false),
-            new Question(R.string.question_three, false),
-            new Question(R.string.question_four, true),
-            new Question(R.string.question_five, true)
+            new Question(R.string.question_1_multiple,R.id.multiple_choice_3,
+                    new int[]{R.string.question_1_choice_1, R.string.question_1_choice_2,
+                    R.string.question_1_choice_3, R.string.question_1_choice_4}),
+            new Question(R.string.question_2_multiple,R.id.multiple_choice_2,
+                    new int[]{R.string.question_2_choice_1, R.string.question_2_choice_2,
+                    R.string.question_2_choice_3, R.string.question_2_choice_4})
     };
 
     private int mCurrentIndex = 0;
@@ -39,21 +42,27 @@ public class QuizActivity extends AppCompatActivity {
     //Private methods that will be used inside the OnCreate
     //I wrote these not google
     private void updateQuestion() {
-            //Get the question instance stored in mCurrentIndex
-            //of the mQuestionBank array. then call the getTextRessId
-            //method (property) to return the integer that points to the string
-            //resource in strings.xml that we want to use.
-            int question = mQuestionBank[mCurrentIndex].getTextRessId();
+        //Get the question instance stored in mCurrentIndex
+        //of the mQuestionBank array. then call the getTextResId
+        //method (property) to return the integer that points to the string
+        //resource in strings.xml that we want to use.
+        int question = mQuestionBank[mCurrentIndex].getTextResId();
 
-            //Assign the integer for the string resource to the
-            //text view so the next question displays.
-            mQuestionTextView.setText(question);
+        //Assign the integer for the string resource to the
+        //text view so the next question displays.
+        mQuestionTextView.setText(question);
+
+        int[] choices = mQuestionBank[mCurrentIndex].getChoiceResIds();
+        mChoice1.setText(choices[0]);
+        mChoice2.setText(choices[1]);
+        mChoice3.setText(choices[2]);
+        mChoice4.setText(choices[3]);
     }
 
-    private void checkAnswer(boolean userPressedTrue){
-        boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+    private void checkAnswer(int selectedRadioButtonId){
+        int correctAnswer = mQuestionBank[mCurrentIndex].getCorrectAnswerResId();
         int messageResId = 0;
-        if (userPressedTrue == answerIsTrue) {
+        if (correctAnswer == selectedRadioButtonId) {
             messageResId = R.string.correct_toast;
         }else{
              messageResId = R.string.incorrect_toast;
@@ -77,33 +86,25 @@ public class QuizActivity extends AppCompatActivity {
         //Get a 'handle' to the text view in the layout
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
 
-        //fetch the widget control from the view and then
-        //cast and assign the class variable we setup
-        mTrueButton = (Button) findViewById(R.id.true_button);
+        mQuestionGroup = (RadioGroup) findViewById(R.id.multiple_group);
 
-        //now that I have a handle to the view widget, I can.
-        //setup an onclick listener for the widget.
-        //This onclicklistener for the widget uses an anonymous inner class.
-        //we are passing what we want to have happen onClick.
-        mTrueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               checkAnswer(true);
+        mChoice1 = (RadioButton) findViewById(R.id.multiple_choice_1);
+        mChoice2 = (RadioButton) findViewById(R.id.multiple_choice_2);
+        mChoice3 = (RadioButton) findViewById(R.id.multiple_choice_3);
+        mChoice4 = (RadioButton) findViewById(R.id.multiple_choice_4);
 
-            }
-        });
 
         //method declared above. Changes the question to the next in the array.
         updateQuestion();
-
-        //see notes from true button
-        mFalseButton = (Button) findViewById(R.id.false_button);
-        mFalseButton.setOnClickListener(new View.OnClickListener() {
+        mSubmitButton = (Button) findViewById(R.id.submit_button);
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkAnswer(false);
+                int selectedAnswerId = mQuestionGroup.getCheckedRadioButtonId();
+                checkAnswer(selectedAnswerId);
             }
         });
+
 
         mNextButton = (Button) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {

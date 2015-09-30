@@ -8,35 +8,42 @@ public class Question {
     //Class level variable to hold the question text
     //In order to get a string from strings.xml, we need
     //an integer as a reference value
-    private int mTextRessId;
+    private int mTextResId;
     //Boolean flag for whether the question is true or false
-    private boolean mAnswerTrue;
+    private int mCorrectAnswerResId;
+
+    public int[] mChoiceResIds;
 
     //Constructor that accepts 2 parameters. The string id,
     //and the bool answer
-    public Question (int textRessId, boolean answerTrue) {
-        mTextRessId = textRessId;
-        mAnswerTrue = answerTrue;
+    public Question (int textResId, int correctAnswerResId, int [] choiceResIds) {
+        mTextResId = textResId;
+        mCorrectAnswerResId = correctAnswerResId;
+        mChoiceResIds = choiceResIds;
 
     }
 
-    //getter for mAnswerTrue
-    public boolean isAnswerTrue() {
-        return mAnswerTrue;
+    public int getTextResId() {
+        return mTextResId;
     }
 
-    //setter for mAnswerTrue
-    public void setAnswerTrue(boolean answerTrue) {
-        mAnswerTrue = answerTrue;
+    public void setTextResId(int textResId) {
+        mTextResId = textResId;
     }
 
-    //getter for mTextRessId
-    public int getTextRessId() {
-        return mTextRessId;
+    public int getCorrectAnswerResId() {
+        return mCorrectAnswerResId;
     }
 
-    //setter for mTextRessId
-    public void setTextRessId(int textRessId) {
-        mTextRessId = textRessId;
+    public void setCorrectAnswerResId(int correctAnswerResId) {
+        mCorrectAnswerResId = correctAnswerResId;
+    }
+
+    public int[] getChoiceResIds() {
+        return mChoiceResIds;
+    }
+
+    public void setChoiceResIds(int[] choiceResIds) {
+        mChoiceResIds = choiceResIds;
     }
 }

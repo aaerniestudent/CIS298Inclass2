@@ -1,5 +1,6 @@
 package edu.kvcc.cis298.cis298inclass1;
 
+import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ public class QuizActivity extends AppCompatActivity {
     private Button mNextButton;
     //variable for the question string
     private TextView mQuestionTextView;
+
+    private Button mCheatButton;
 
     //The questions that will be used it is an array of type
     //question. that contains 5 questions. it is a hard coded
@@ -112,6 +115,18 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+            }
+        });
+
+        mCheatButton = (Button) findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+                Intent i = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+                //Intent i = new Intent(QuizActivity.this, CheatActivity.class);
+                startActivity(i);
+
             }
         });
 

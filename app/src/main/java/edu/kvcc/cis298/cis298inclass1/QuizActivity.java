@@ -157,8 +157,8 @@ public class QuizActivity extends AppCompatActivity {
         //log that onSaveInstanceState was called
         Log.i(TAG, "onSaveInstanceState");
         //put the index of the question that we are on
-        //into the variable KEY_INDEX and the value "index"
-        //
+        //into the bundle, using a key defined above as the
+        //variable KEY_INDEX and the value "index"
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
     }
 

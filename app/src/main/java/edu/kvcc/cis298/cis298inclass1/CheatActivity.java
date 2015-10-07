@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class CheatActivity extends AppCompatActivity {
 
@@ -14,9 +17,21 @@ public class CheatActivity extends AppCompatActivity {
     //the value will be the value that is passed into the method below called
     //newIntent
     private static final String EXTRA_ANSWER_IS_TRUE =
-            "edu.kvcc.cis298.cis298inclass.answer is true";
+            "edu.kvcc.cis298.cis298inclass.answer_is_true";
 
-    //this method is being declared on this class so that any clas that wants
+    //key for the return result intent
+    private static final String EXTRA_ANSWER_SHOW =
+            "edu.kvcc.cis298.cis298inclass.answer_shown";
+
+    //A bool to hold the answer to the question that we get from
+    //pressing cheat on the quiz activity and coming here
+    private boolean mAnswerIsTrue;
+
+    //variables for the controls we need to work with.
+    private TextView mAnswerTextView;
+    private Button mShowAnswer;
+
+    //this method is being declared on this class so that any class that wants
     //start this intent can call this static method to get a properly
     //formatted intent. The intent could be created in the calling class, but
     //then the calling class would have to know what this activity is expecting.
@@ -29,10 +44,43 @@ public class CheatActivity extends AppCompatActivity {
         return i;
     }
 
+    //A static method to determine if the user clicked on the cheat button
+    //of this activity. It is static so that it can be called on this class
+    //from the activity that started this activity.
+    public static boolean wasAnswerShown(Intent result){
+        return result.getBooleanExtra(EXTRA_ANSWER_SHOW, false);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
+
+        //get the extra from the intent that is the answer to the question
+        mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
+
+        mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
+        mShowAnswer = (Button) findViewById(R.id.show_answer_button);
+
+        mShowAnswer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //if the answer is true, set the view text to true
+                if (mAnswerIsTrue){
+                    mAnswerTextView.setText(R.string.true_button);
+                } else { //else text is false
+                    mAnswerTextView.setText(R.string.false_button);
+                }
+                setAnswerShownResult(true);
+            }
+        });
+
+    }
+
+    private void setAnswerShownResult(boolean isAnswerShown) {
+        Intent data = new Intent();
+        data.putExtra(EXTRA_ANSWER_SHOW, isAnswerShown);
+        setResult(RESULT_OK, data);
     }
 
     @Override
